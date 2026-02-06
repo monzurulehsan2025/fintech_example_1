@@ -100,6 +100,15 @@ const TransactionItem = ({ name, category, date, amount, status }) => (
 );
 
 function App() {
+  const trackEvent = (eventName, metadata = {}) => {
+    const timestamp = new Date().toISOString();
+    console.group(`📊 Analytics Event: ${eventName}`);
+    console.log(`Time: ${timestamp}`);
+    console.log('Metadata:', metadata);
+    console.groupEnd();
+    // In a real app, this would be: fetch('/api/analytics', { method: 'POST', body: JSON.stringify({ eventName, metadata, timestamp }) });
+  };
+
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -129,7 +138,11 @@ function App() {
             <div style={{ position: 'relative', zIndex: 2 }}>
               <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Welcome back, Alex</h1>
               <p style={{ opacity: 0.9, marginBottom: '1.5rem' }}>You have 3 new offers tailored to your travel interests.</p>
-              <button className="btn btn-primary" style={{ background: 'white', color: 'var(--primary)' }}>
+              <button
+                className="btn btn-primary"
+                style={{ background: 'white', color: 'var(--primary)' }}
+                onClick={() => trackEvent('VIEW_PERSONALIZED_PLAN', { location: 'hero_banner', userId: 'alex_01' })}
+              >
                 View Personalized Plan
               </button>
             </div>
@@ -148,7 +161,13 @@ function App() {
               </div>
               <img src="/card.png" alt="Amex Platinum" className="card-img" />
               <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.5rem' }}>
-                <button className="btn btn-primary" style={{ flex: 1 }}>Pay Bill</button>
+                <button
+                  className="btn btn-primary"
+                  style={{ flex: 1 }}
+                  onClick={() => trackEvent('INITIATE_BILL_PAY', { amount: 4285.50, currency: 'USD', cardType: 'Platinum' })}
+                >
+                  Pay Bill
+                </button>
                 <button className="btn" style={{ background: 'var(--bg)', color: 'var(--secondary)', flex: 1 }}>Manage</button>
               </div>
             </motion.div>
